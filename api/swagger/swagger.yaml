@@ -1,0 +1,95 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /submit:
+    # our controller name
+    x-swagger-router-controller: priceCollect
+    post:
+      operationId: saveit
+      description: add a new gas price to the list
+      # movie info to be stored
+      parameters:
+        - name: Price
+          description: all price
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Price"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GetPriceResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  GetPriceResponse:
+    type: object
+    properties:
+      message:
+        type: string
+      movie:
+        type: object
+        items:
+          $ref: "#/definitions/Price"
+  Price:
+    type: object
+    required: 
+      - storeNumber
+      - storeName
+      - location
+      - regular
+      - mid
+      - premium
+      - special
+      - store
+    properties:
+      storeNumber:
+        type: number
+      storeName:
+        type: string
+      location:
+        type: string
+      regular:
+        type: number
+      mid:
+        type: number
+      premium:
+        type: number
+      diesel:
+        type: number
+      special:
+        type: string
+      store:
+        type: string
+  ErrorResponse:
+    required: 
+      - message
+    properties:
+      message:
+        type: string
+      
+      
+            
